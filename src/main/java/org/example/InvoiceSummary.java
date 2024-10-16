@@ -4,9 +4,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class InvoiceSummary {
+
     public double noOfRides;
     public double totalFare;
     public double avgFare;
+
     public InvoiceSummary(int fare, double rides) {
         this.noOfRides = rides;
         this.totalFare = fare;
@@ -15,6 +17,7 @@ public class InvoiceSummary {
     Map<Integer,InvoiceSummary>userId=new HashMap<>();
     public Map<Integer,InvoiceSummary> getUserId(){
         return userId;
+
     }
     public void setUserId(int id,InvoiceSummary summary){
     }
@@ -28,6 +31,7 @@ public class InvoiceSummary {
             return false;
         InvoiceSummary summary = (InvoiceSummary) obj;
         return Double.compare(summary.noOfRides,noOfRides)==0 && totalFare==summary.totalFare && Double.compare(summary.avgFare,avgFare)==0;
+
     }
 
 }
