@@ -4,11 +4,11 @@ public class InvoiceGenerator {
     public static final int costTime=1;
     public static final double costPerKilometer=10;
     public static final double minFare=5;
-    public static final double premiumCostTime = 2;
-    public static final double premiumCostPerKilometer = 15;
-    public static final double premiumMinFare = 20;
+    private final RideRepository rideRepository;
 
-   
+    public InvoiceGenerator(RideRepository rideRepository) {
+        this.rideRepository = rideRepository;
+    }
 
     public double calculateFare(double distance, int time) {
 
@@ -19,23 +19,20 @@ public class InvoiceGenerator {
         return totalFare;
     }
 
-    public InvoiceSummary calculateFare(Rides[] rides) {
-        double totalFare=0;
+    public InvoiceSummary calculateFare(int userId) {
+        Rides[] rides = rideRepository.getRides(userId);
+        double totalFare = 0;
         for (Rides ride : rides) {
-            double fare = 0;
-            if (ride.rideType.equalsIgnoreCase("Normal"))
-                fare += this.calculateFare(ride.distance, ride.time);
-            else if (ride.rideType.equalsIgnoreCase("Premium")) {
-                fare += this.calculatePremiumFare(ride.distance, ride.time);
-            }
-            totalFare += fare;
+            totalFare += calculateFare(ride.distance, ride.time);
         }
         return new InvoiceSummary(rides.length, totalFare);
     }
-
-    public double calculatePremiumFare(double distance, int time) {
-        double totalFare = distance * premiumCostPerKilometer + time * premiumCostTime;
-        return Math.max(totalFare, premiumMinFare);
+    public double calculateFareForMultipleRides(Rides[] rides) {
+        double totalFare = 0;
+        for (Rides ride : rides) {
+            totalFare += calculateFare(ride.distance, ride.time);
+        }
+        return totalFare;
     }
 
 }
